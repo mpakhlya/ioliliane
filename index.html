@@ -65,5 +65,57 @@
     <footer>
         <p>&copy; 2024 mpakhlya</p>
     </footer>
+     <script>
+        // JavaScript for draggable functionality
+        const draggable = document.getElementById("draggableBox");
+        let offsetX, offsetY, isDragging = false;
+
+        draggable.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            // Get the initial click position relative to the box
+            offsetX = e.clientX - draggable.offsetLeft;
+            offsetY = e.clientY - draggable.offsetTop;
+            draggable.style.cursor = "grabbing";  // Change cursor while dragging
+
+            // Add mousemove event to move the element
+            document.addEventListener('mousemove', moveElement);
+        });
+
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+            draggable.style.cursor = "grab";  // Restore cursor when dragging ends
+            document.removeEventListener('mousemove', moveElement);
+        });
+
+        function moveElement(e) {
+            if (isDragging) {
+                const container = document.querySelector('.container');
+
+                // Calculate new position
+                let newX = e.clientX - offsetX;
+                let newY = e.clientY - offsetY;
+
+                // Restrict movement to the boundaries of the container
+                const containerRect = container.getBoundingClientRect();
+                const boxRect = draggable.getBoundingClientRect();
+
+                // Restrict horizontal movement
+                if (newX < 0) newX = 0;
+                if (newX + boxRect.width > containerRect.width) {
+                    newX = containerRect.width - boxRect.width;
+                }
+
+                // Restrict vertical movement
+                if (newY < 0) newY = 0;
+                if (newY + boxRect.height > containerRect.height) {
+                    newY = containerRect.height - boxRect.height;
+                }
+
+                // Set new position of the draggable element
+                draggable.style.left = `${newX}px`;
+                draggable.style.top = `${newY}px`;
+            }
+        }
+    </script>
 </body>
 </html>
